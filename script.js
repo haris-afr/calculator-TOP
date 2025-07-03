@@ -95,3 +95,23 @@ let currentState = ""
 let calculatorOn = false;
 let previousAns = 0;
 
+const numberKeys = document.querySelectorAll(".number-key");
+const operatorKeys = document.querySelectorAll(".operator-key");
+const delKey = document.querySelector("#key-DEL");
+const acKey = document.querySelector("#key-AC");
+
+numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addNumberToStack(e.target.textContent)));
+delKey.addEventListener("click", () => deleteNumberFromStack());
+acKey.addEventListener("click", () => clearStack());
+
+function addNumberToStack(number){
+    memoryNumberStack.push(number);
+    console.log(memoryNumberStack);
+}
+function deleteNumberFromStack(){
+    memoryNumberStack.pop();
+}
+function clearStack(){
+    memoryNumberStack = [];
+    memoryOperationStack = [];
+}
