@@ -32,6 +32,11 @@ button-grey: rgb(109, 109, 109)
     src: url("fonts/bm-dohyeon (Model)/BMDOHYEON_otf.otf");
 }
 
+@font-face {
+    font-family: roboto;
+    src: url("fonts/roboto (keys)/Roboto-VariableFont_wdth,wght.ttf")
+}
+
 *{
     box-sizing: border-box;
 }
@@ -169,7 +174,7 @@ button-grey: rgb(109, 109, 109)
     margin-bottom: 7px;
 
     color:rgb(207, 227, 227);
-    font-family: ro;
+    font-family: roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 20px;
     font-weight: 900;
 }
