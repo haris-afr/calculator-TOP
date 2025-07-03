@@ -184,7 +184,7 @@ button-grey: rgb(109, 109, 109)
     font-weight: 700;
 }
 
-#AC-key,
-#DEL-key{
+#key-AC,
+#key-DEL{
     background-color: rgb(150, 178, 91);
 }
