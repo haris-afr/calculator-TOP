@@ -1,7 +1,39 @@
+/* full pallet
+button-text-white: rgb(254, 254, 254)
+button-text-yellow: rgb(155, 156, 117)
+button-text-pink: rgb(164, 120, 135)
+button-text-blue: rgb(79, 112, 133)
+button-green: rgb(150, 178, 91)
+button-grey: rgb(109, 109, 109)
+button-black: rgb(33, 33, 33)
+metal-button-grey: rgb(63, 63, 63)
+background-dark-grey: rgb(45, 45, 45)
+background-black: rgb(31, 31, 31)
+border-black: rgb(12, 12, 12)
+solar-cell-brown: rgb(47, 29, 26)
+screen-background-teal: rgb(207, 227, 227)
+screen-text-black: rgb(5, 2, 8)
+*/
+
+/* used pallete 
+background-dark-grey: rgb(45, 45, 45)
+border-black: rgb(12, 12, 12)
+
+
+*/
 *{
     box-sizing: border-box;
 }
 
-p{
-    color:red;
+.calculator-body{
+    /* background-color: rgb(45, 45, 45); */
+    border: 4px rgb(31, 31, 31) solid;
+    border-radius: 15px;
+    padding: 8px;
+    margin: auto;
+    width: 500px;
+    height: 900px;
+
+    display: flex;
+    flex-direction: column;
 }
