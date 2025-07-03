@@ -165,6 +165,11 @@ button-grey: rgb(109, 109, 109)
     border: 1px solid rgb(3, 3, 3);
     background-color: rgb(33, 33, 33);
     margin-bottom: 5px;
+
+    color:rgb(207, 227, 227);
+    font-family: roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .bottom-row-button{
@@ -175,8 +180,8 @@ button-grey: rgb(109, 109, 109)
 
     color:rgb(207, 227, 227);
     font-family: roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 20px;
-    font-weight: 900;
+    font-size: 30px;
+    font-weight: 700;
 }
 
 #AC-key,

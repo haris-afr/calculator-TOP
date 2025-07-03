@@ -33,27 +33,44 @@ function operate (a, b, operator){
     }
 }
 
-function createMiddleRowButton(){
+function createMiddleRowButton(key, keyID){
     const btn = document.createElement("button");
+    btn.textContent = key;
+    if (key != ""){
+        btn.id = keyID + "-key";
+    };
     btn.classList.add("middle-row-button");
     middleRow.appendChild(btn);
 }
 
-function createBottomRowButton(key){
+function createBottomRowButton(key, keyID){
     const btn = document.createElement("button");
     btn.textContent = key;
-    btn.id = key + "-key";
+    if (key != ""){
+        btn.id = keyID + "-key";
+    };
     btn.classList.add("bottom-row-button");
     bottomRow.appendChild(btn);
 }
 
+// these two must have either unique or blank keys!
+
+const middleRowKeys =   ["x²", "x³", "xʸ", "sin⁻¹", "cos⁻¹", "tan⁻¹",
+                        "²√", "³√", "ʸ√", "sin", "cos", "tan",
+                        "log", "ln", "(", ")", "!", "x⁻¹",];
+const middleRowKeyIDs =   ["x-square", "x-cube", "x-pow-y", "sin-inv", "cos-inv", "tan-inv",
+                        "sqrt", "cbrt", "y-root", "sin", "cos", "tan",
+                        "log", "ln", "bracket-start", "bracket-end", "factorial", "x-inv",];
+
 const bottomRowKeys =   ["7", "8", "9", "DEL", "AC", 
-                        "4", "5", "6", "X", "/",
+                        "4", "5", "6", "×", "÷",
                         "1", "2", "3", "+", "-",
                         "0", ".", "10^x", "Ans", "="];
+const bottomRowKeyIDs =   ["7", "8", "9", "DEL", "AC", 
+                        "4", "5", "6", "multiply", "divide",
+                        "1", "2", "3", "plus", "minus",
+                        "0", "decimal", "10-power", "Ans", "equal"];
 
-for (i = 0; i < 18; i++){createMiddleRowButton();}
+for (i = 0; i < 18; i++){createMiddleRowButton(middleRowKeys[i], middleRowKeyIDs[i]);}
 
-for(i = 0; i < 20; i++){
-    createBottomRowButton(bottomRowKeys[i]);
-}
+for(i = 0; i < 20; i++){createBottomRowButton(bottomRowKeys[i], bottomRowKeyIDs[i]);}
