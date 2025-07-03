@@ -22,6 +22,9 @@ solar-cell-brown: rgb(47, 29, 26)
 button-text-white: rgb(254, 254, 254)
 screen-background-teal: rgb(207, 227, 227)
 metal-button-grey: rgb(63, 63, 63)
+button-black: rgb(33, 33, 33)
+button-green: rgb(150, 178, 91)
+button-grey: rgb(109, 109, 109)
 */
 
 @font-face {
@@ -79,19 +82,26 @@ metal-button-grey: rgb(63, 63, 63)
     display: flex;
     background-color: rgb(207, 227, 227);
     border: 3px solid rgb(31, 31, 31);
-    height: 125px;
+    height: 140px;
+    padding: 10px;
 }
 
 .calculator-top-row{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 50px;
 }
 
 .shift-alpha,
 .mode-on{
     display: flex;
-    gap: 15px;
- 
+    box-sizing: content-box;
+    gap: 35px;
+    background-color: rgb(31, 31, 31);
+    height: 40px;
+    border-radius: 40px;
+    border: 1px solid rgb(3, 3, 3);
 }
 
 .metal-button{
@@ -123,4 +133,36 @@ metal-button-grey: rgb(63, 63, 63)
 .left-right{
     display: flex;
     gap: 15px;
+}
+
+.calculator-mid-row,
+.calculator-bottom-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.calculator-bottom-row{
+    margin-top: 20px;
+    justify-content: center;
+
+}
+
+.middle-row-button{
+    width: 70px;
+    height: 35px;
+    border: 1px solid rgb(3, 3, 3);
+    background-color: rgb(33, 33, 33);
+    margin-bottom: 5px;
+}
+
+.bottom-row-button{
+    width: 85px;
+    height: 60px;
+    background-color: rgb(109, 109, 109);
+    margin-bottom: 7px;    
+}
+
+.bottom-row-button.green-btn{
+    background-color: rgb(150, 178, 91);
 }
