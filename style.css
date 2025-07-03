@@ -21,6 +21,12 @@ border-black: rgb(12, 12, 12)
 
 
 */
+
+@font-face {
+    font-family: model-font;
+    src: url("fonts/bm-dohyeon (Model)/BMDOHYEON_otf.otf");
+}
+
 *{
     box-sizing: border-box;
 }
@@ -36,4 +42,12 @@ border-black: rgb(12, 12, 12)
 
     display: flex;
     flex-direction: column;
+}
+
+.calculator-head{
+
+}
+
+.calculator-model{
+    font-family: model-font, 'Courier New', Courier, monospace;
 }
