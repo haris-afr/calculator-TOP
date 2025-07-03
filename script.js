@@ -39,21 +39,21 @@ function createMiddleRowButton(){
     middleRow.appendChild(btn);
 }
 
-function createBottomRowButton(isGreen=false){
+function createBottomRowButton(key){
     const btn = document.createElement("button");
+    btn.textContent = key;
+    btn.id = key + "-key";
     btn.classList.add("bottom-row-button");
-    if (isGreen){
-        btn.classList.add("green-btn");
-    }
     bottomRow.appendChild(btn);
 }
 
+const bottomRowKeys =   ["7", "8", "9", "DEL", "AC", 
+                        "4", "5", "6", "X", "/",
+                        "1", "2", "3", "+", "-",
+                        "0", ".", "10^x", "Ans", "="];
+
 for (i = 0; i < 18; i++){createMiddleRowButton();}
+
 for(i = 0; i < 20; i++){
-    if (i != 3 && i != 4){
-        createBottomRowButton();
-    }
-    else{
-        createBottomRowButton(true);
-    }
+    createBottomRowButton(bottomRowKeys[i]);
 }

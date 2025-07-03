@@ -122,6 +122,11 @@ button-grey: rgb(109, 109, 109)
     width: 75px;
     align-items: center;
     text-align: center;
+
+    box-sizing: content-box;
+    background-color: rgb(31, 31, 31);
+    border-radius: 40px;
+    border: 1px solid rgb(3, 3, 3);
 }
 
 .arrow-key.metal-button{
@@ -132,12 +137,13 @@ button-grey: rgb(109, 109, 109)
 
 .left-right{
     display: flex;
-    gap: 15px;
+    gap: 25px;
 }
 
 .calculator-mid-row,
 .calculator-bottom-row{
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
 }
@@ -149,7 +155,7 @@ button-grey: rgb(109, 109, 109)
 }
 
 .middle-row-button{
-    width: 70px;
+    width: 68px;
     height: 35px;
     border: 1px solid rgb(3, 3, 3);
     background-color: rgb(33, 33, 33);
@@ -160,9 +166,15 @@ button-grey: rgb(109, 109, 109)
     width: 85px;
     height: 60px;
     background-color: rgb(109, 109, 109);
-    margin-bottom: 7px;    
+    margin-bottom: 7px;
+
+    color:rgb(207, 227, 227);
+    font-family: ro;
+    font-size: 20px;
+    font-weight: 900;
 }
 
-.bottom-row-button.green-btn{
+#AC-key,
+#DEL-key{
     background-color: rgb(150, 178, 91);
 }
