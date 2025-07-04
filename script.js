@@ -102,6 +102,7 @@ const ansKey = document.querySelector("#key-ans");
 numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addToStack(e.target.textContent)));
 delKey.addEventListener("click", () => delStack());
 acKey.addEventListener("click", () => clearStack());
+equalsKey.addEventListener("click", () => evaluateStack());
 
 function addToStack(number){
     memoryStack.push(number);
@@ -117,12 +118,25 @@ function clearStack(){
    updateDisplay();
 }
 function updateDisplay(){
+    if (memoryStack.length == 0){
+        screenText.textContent = "_";
+        return;
+    }
+
     let screenStr = memoryStack.join("");
+    screenText.textContent = screenStr;
     if (screenText.offsetWidth > 420){
         screenStr = "_" + memoryStack.slice(-12).join("");
+        screenText.textContent = screenStr;
     }
-    else if (memoryStack.length == 0){
-        screenStr = "_";
-    }
-    screenText.textContent = screenStr;
+}
+
+function evaluateStack(){
+
+
+    // TODO
+
+    clearStack();
+    memoryStack = [previousAns];
+    updateDisplay();
 }
