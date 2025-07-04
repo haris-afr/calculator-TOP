@@ -21,11 +21,8 @@ function createBottomRowButton(key, keyID){
     if (key != ""){
         btn.id = "key-" + keyID;
     };
-    if (numbers.includes(keyID)){
+    if (numbers.includes(keyID) || operators.includes(keyID)){
         btn.classList.add("number-key")
-    }
-    if (operators.includes(keyID)){
-        btn.classList.add("operator-key");
     }
     btn.classList.add("bottom-row-button");
     bottomRow.appendChild(btn);
@@ -47,7 +44,7 @@ const bottomRowKeys =   ["7", "8", "9", "DEL", "AC",
 const bottomRowKeyIDs =   ["7", "8", "9", "DEL", "AC", 
                         "4", "5", "6", "multiply", "divide",
                         "1", "2", "3", "plus", "minus",
-                        "0", "decimal", "10-power", "Ans", "equal"];
+                        "0", "decimal", "ten-power", "ans", "equals"];
 
 for (i = 0; i < 18; i++){createMiddleRowButton(middleRowKeys[i], middleRowKeyIDs[i]);}
 
@@ -89,29 +86,31 @@ onBtn.addEventListener("click", () => {calculatorOn = !calculatorOn;});
 
 const screen = document.querySelector(".calculator-screen");
 const screenText = document.querySelector(".calculator-screen-text")
-let memoryOperationStack = [];
-let memoryNumberStack = [];
+let memoryStack = [];
 let currentState = ""
 let calculatorOn = false;
 let previousAns = 0;
 
 const numberKeys = document.querySelectorAll(".number-key");
-const operatorKeys = document.querySelectorAll(".operator-key");
 const delKey = document.querySelector("#key-DEL");
 const acKey = document.querySelector("#key-AC");
+const equalsKey = document.querySelector("#key-equals");
+const tenPowerKey = document.querySelector("#key-ten-power");
+const decimalKey = document.querySelector("#key-decima;");
+const ansKey = document.querySelector("#key-ans");
 
-numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addNumberToStack(e.target.textContent)));
-delKey.addEventListener("click", () => deleteNumberFromStack());
+numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addToStack(e.target.textContent)));
+delKey.addEventListener("click", () => delStack());
 acKey.addEventListener("click", () => clearStack());
 
-function addNumberToStack(number){
-    memoryNumberStack.push(number);
-    console.log(memoryNumberStack);
+function addToStack(number){
+    memoryStack.push(number);
+    console.log(memoryStack);
 }
-function deleteNumberFromStack(){
-    memoryNumberStack.pop();
+function delStack(){
+    memoryStack.pop();
 }
 function clearStack(){
-    memoryNumberStack = [];
-    memoryOperationStack = [];
+   memoryStack = [];
 }
+
