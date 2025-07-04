@@ -40,7 +40,7 @@ const middleRowKeyIDs =   ["x-square", "x-cube", "x-pow-y", "sin-inv", "cos-inv"
 const bottomRowKeys =   ["7", "8", "9", "DEL", "AC", 
                         "4", "5", "6", "×", "÷",
                         "1", "2", "3", "+", "-",
-                        "0", ".", "10^x", "Ans", "="];
+                        "0", ".", "×10ˣ", "Ans", "="];
 const bottomRowKeyIDs =   ["7", "8", "9", "DEL", "AC", 
                         "4", "5", "6", "multiply", "divide",
                         "1", "2", "3", "plus", "minus",
@@ -96,7 +96,7 @@ const delKey = document.querySelector("#key-DEL");
 const acKey = document.querySelector("#key-AC");
 const equalsKey = document.querySelector("#key-equals");
 const tenPowerKey = document.querySelector("#key-ten-power");
-const decimalKey = document.querySelector("#key-decima;");
+const decimalKey = document.querySelector("#key-decimal");
 const ansKey = document.querySelector("#key-ans");
 
 numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addToStack(e.target.textContent)));
@@ -105,12 +105,18 @@ acKey.addEventListener("click", () => clearStack());
 
 function addToStack(number){
     memoryStack.push(number);
+    updateDisplay();
     console.log(memoryStack);
 }
 function delStack(){
     memoryStack.pop();
+    updateDisplay();
 }
 function clearStack(){
    memoryStack = [];
+   updateDisplay();
 }
-
+function updateDisplay(){
+    let screenStr = memoryStack.join("");
+    screenText.textContent = screenStr;
+}
