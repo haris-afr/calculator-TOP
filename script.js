@@ -118,5 +118,8 @@ function clearStack(){
 }
 function updateDisplay(){
     let screenStr = memoryStack.join("");
+    if (screenText.offsetWidth > 420){
+        screenStr = "_" + memoryStack.slice(-12).join("");
+    }
     screenText.textContent = screenStr;
 }
