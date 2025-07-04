@@ -121,5 +121,8 @@ function updateDisplay(){
     if (screenText.offsetWidth > 420){
         screenStr = "_" + memoryStack.slice(-12).join("");
     }
+    else if (memoryStack.length == 0){
+        screenStr = "_";
+    }
     screenText.textContent = screenStr;
 }

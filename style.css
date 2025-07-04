@@ -125,7 +125,7 @@ button-grey: rgb(109, 109, 109)
     width: 40px;
     height: 40px;
     text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Helvetica, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: rgb(63, 63, 63);
     color: rgb(254, 254, 254);
     font-weight: 600;
@@ -170,6 +170,12 @@ button-grey: rgb(109, 109, 109)
 
 }
 
+.middle-row-button,
+.bottom-row-button{
+    color:rgb(207, 227, 227);
+    font-family: Helvetica, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .middle-row-button{
     width: 68px;
     height: 35px;
@@ -177,8 +183,6 @@ button-grey: rgb(109, 109, 109)
     background-color: rgb(33, 33, 33);
     margin-bottom: 5px;
 
-    color:rgb(207, 227, 227);
-    font-family: roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 15px;
     font-weight: 500;
 }
@@ -189,8 +193,6 @@ button-grey: rgb(109, 109, 109)
     background-color: rgb(109, 109, 109);
     margin-bottom: 7px;
 
-    color:rgb(207, 227, 227);
-    font-family: roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 30px;
     font-weight: 700;
 }
