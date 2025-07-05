@@ -111,7 +111,7 @@ acKey.addEventListener("click", () => clearStack());
 equalsKey.addEventListener("click", () => evaluateStack());
 
 function addToStack(number){
-    if (operatorSymbols.includes(number) && memoryStack.length == 0 && previousAns != null){
+    if (operatorSymbols.includes(number) && memoryStack.length == 0 && previousAns != null && number != "."){
         previousAns.toString().split("").forEach((element) => memoryStack.push(element));
     }
     memoryStack.push(number);
@@ -149,7 +149,13 @@ function evaluateStack(){
     //handle multiplication and division from left to right
     for (i = 0; i < unitsStack.length; i++){
         if (unitsStack[i] == "."){
-            const val = unitsStack[i - 1] + (unitsStack[i + 1] / Math.pow(10, Math.floor(Math.log10(unitsStack[i+1]) + 1) ) );
+            const wholeNum = unitsStack[i - 1];
+            const decimalVal = (unitsStack[i + 1] / Math.pow(10, Math.floor(Math.log10(unitsStack[i+1]) + 1) ));
+            // if (un)
+            // if (operatorSymbols.includes(unitsStack[i-1])){
+            //     wholeNum = 0;
+            // }
+            const val =  wholeNum + decimalVal;
             unitsStack.splice(i-1, 3, val);
         }
     }
@@ -173,12 +179,19 @@ function evaluateStack(){
             unitsStack.splice(i-1, 3, val);
         }
     }
+    
+    
     console.log(unitsStack);
-    previousAns = unitsStack[0];
-
-
-    clearStack();
-    screenText.textContent = previousAns;
+    if (errorInStack){
+        clearStack();
+        screenText.textContent = "Invalid Operation!";
+    }
+    else{
+        previousAns = unitsStack[0];
+        clearStack();
+        screenText.textContent = previousAns;
+        
+    }
 }
 
 function organiseStack(unitsStack){
