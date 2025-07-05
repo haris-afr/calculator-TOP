@@ -2,7 +2,8 @@ const middleRow = document.querySelector(".calculator-mid-row");
 const bottomRow = document.querySelector(".calculator-bottom-row");
 
 const numbers = ['0','1','2','3','4','5','6','7','8','9'];
-const operators = ['plus','minus','multiply','divide']
+const operators = ['plus','minus','multiply','divide'];
+const operatorSymbols = ["+", "-", "×", "÷"];
 
 function createMiddleRowButton(key, keyID){
     const btn = document.createElement("button");
@@ -22,7 +23,7 @@ function createBottomRowButton(key, keyID){
         btn.id = "key-" + keyID;
     };
     if (numbers.includes(keyID) || operators.includes(keyID)){
-        btn.classList.add("number-key")
+        btn.classList.add("number-key");
     }
     btn.classList.add("bottom-row-button");
     bottomRow.appendChild(btn);
@@ -51,7 +52,7 @@ for (i = 0; i < 18; i++){createMiddleRowButton(middleRowKeys[i], middleRowKeyIDs
 for(i = 0; i < 20; i++){createBottomRowButton(bottomRowKeys[i], bottomRowKeyIDs[i]);}
 
 function cprint(val) {console.log(val);}
-function add(a, b) {return a + b;}
+function add(a = 0, b = 0) {return a + b;}
 function subtract(a, b) {return a - b;}
 function multiply(a, b) {return a * b;}
 function divide(a, b) {return a / b;}
@@ -85,24 +86,24 @@ const onBtn = document.querySelector("#on");
 onBtn.addEventListener("click", () => {calculatorOn = !calculatorOn;});
 
 const screen = document.querySelector(".calculator-screen");
-const screenText = document.querySelector(".calculator-screen-text")
+const screenText = document.querySelector(".calculator-screen-text");
 let memoryStack = [];
-let currentState = ""
-let calculatorOn = false;
+// let currentState = "";
+// let calculatorOn = false;
 let previousAns = 0;
 
 const numberKeys = document.querySelectorAll(".number-key");
 const delKey = document.querySelector("#key-DEL");
 const acKey = document.querySelector("#key-AC");
 const equalsKey = document.querySelector("#key-equals");
-const tenPowerKey = document.querySelector("#key-ten-power");
-const decimalKey = document.querySelector("#key-decimal");
+// const tenPowerKey = document.querySelector("#key-ten-power");
+// const decimalKey = document.querySelector("#key-decimal");
 const ansKey = document.querySelector("#key-ans");
 
 numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addToStack(e.target.textContent)));
 delKey.addEventListener("click", () => delStack());
 acKey.addEventListener("click", () => clearStack());
-equalsKey.addEventListener("click", () => evaluateStack());
+equalsKey.addEventListener("click", () => organiseStack());
 
 function addToStack(number){
     memoryStack.push(number);
@@ -132,11 +133,43 @@ function updateDisplay(){
 }
 
 function evaluateStack(){
+    let unitsStack = [];
+    organiseStack(unitsStack);
 
-
-    // TODO
-
+    console.log(unitsStack);
     clearStack();
-    memoryStack = [previousAns];
-    updateDisplay();
+    screenText.textContent = previousAns;
 }
+
+function organiseStack(unitsStack){
+    // Join the seperate digits and operators together into units so we can evaluate them
+    // E.G. [1,2,3,+,3,5,/,2,4] => [123, '+', 35, '/', 24]
+    
+    let tempStack = [];
+    for (i = 0; i < memoryStack.length; i++){
+        if (numbers.includes(memoryStack[i]) && i == memoryStack.length - 1){
+            tempStack.push(memoryStack[i]);
+            tempToUnitStack(tempStack, unitsStack);
+        }
+        else if (numbers.includes(memoryStack[i])){
+            tempStack.push(memoryStack[i]);
+        }
+        else if(operatorSymbols.includes(memoryStack[i])){
+            tempToUnitStack(tempStack, unitsStack);
+            unitsStack.push(memoryStack[i]);
+        }
+    }
+}
+
+function tempToUnitStack(tempStack, unitsStack){
+    // Convert the digits in the temp stack to a single number
+    if (tempStack.length != 0){
+        unitsStack.push( Number(tempStack.join("")) );
+        tempStack.length = 0; //clears array, doing tempStack = [] creates reference problems
+    }
+    else{
+        return -1;
+    }
+}
+
+
