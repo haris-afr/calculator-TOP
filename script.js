@@ -2,15 +2,17 @@ const middleRow = document.querySelector(".calculator-mid-row");
 const bottomRow = document.querySelector(".calculator-bottom-row");
 
 const numbers = ['0','1','2','3','4','5','6','7','8','9'];
-const operators = ['plus','minus','multiply','divide'];
-const operatorSymbols = ["+", "-", "×", "÷"];
+const operators = ['plus','minus','multiply','divide', 'decimal'];
+const operatorSymbols = ["+", "-", "×", "÷", '.'];
 
 function createMiddleRowButton(key, keyID){
     const btn = document.createElement("button");
     btn.textContent = key;
-    if (key != ""){
-        btn.id = "key-" + keyID;
-    };
+    btn.id = "key-" + keyID;
+
+    if (numbers.includes(keyID) || operators.includes(keyID)){
+        btn.classList.add("number-key");
+    }
 
     btn.classList.add("middle-row-button");
     middleRow.appendChild(btn);
@@ -19,9 +21,8 @@ function createMiddleRowButton(key, keyID){
 function createBottomRowButton(key, keyID){
     const btn = document.createElement("button");
     btn.textContent = key;
-    if (key != ""){
-        btn.id = "key-" + keyID;
-    };
+    btn.id = "key-" + keyID;
+
     if (numbers.includes(keyID) || operators.includes(keyID)){
         btn.classList.add("number-key");
     }
@@ -31,21 +32,26 @@ function createBottomRowButton(key, keyID){
 
 // these two must have either unique or blank keys!
 
-const middleRowKeys =   ["x²", "x³", "xʸ", "sin⁻¹", "cos⁻¹", "tan⁻¹",
-                        "²√", "³√", "ʸ√", "sin", "cos", "tan",
-                        "log", "ln", "(", ")", "!", "x⁻¹",];
+// const middleRowKeys =   ["x²", "x³", "xʸ", "sin⁻¹", "cos⁻¹", "tan⁻¹",
+//                         "²√", "³√", "ʸ√", "sin", "cos", "tan",
+//                         "log", "ln", "×10", ".", "!", "x⁻¹",];
+
+const middleRowKeys =   ["", "", "", "", "", "",
+                        "", "", "", "", "", "",
+                        "", "", "", "", "", "."]; //Not implemented
+
 const middleRowKeyIDs =   ["x-square", "x-cube", "x-pow-y", "sin-inv", "cos-inv", "tan-inv",
                         "sqrt", "cbrt", "y-root", "sin", "cos", "tan",
-                        "log", "ln", "bracket-start", "bracket-end", "factorial", "x-inv",];
+                        "log", "ln", "x-inv","ten-power", "factorial", "decimal",];
 
 const bottomRowKeys =   ["7", "8", "9", "DEL", "AC", 
                         "4", "5", "6", "×", "÷",
                         "1", "2", "3", "+", "-",
-                        "0", ".", "×10ˣ", "Ans", "="];
+                        "0", "(", ")", "Ans", "="];
 const bottomRowKeyIDs =   ["7", "8", "9", "DEL", "AC", 
                         "4", "5", "6", "multiply", "divide",
                         "1", "2", "3", "plus", "minus",
-                        "0", "decimal", "ten-power", "ans", "equals"];
+                        "0", "bracket-start", "bracket-end", "ans", "equals"];
 
 for (i = 0; i < 18; i++){createMiddleRowButton(middleRowKeys[i], middleRowKeyIDs[i]);}
 
@@ -89,7 +95,7 @@ const screen = document.querySelector(".calculator-screen");
 const screenText = document.querySelector(".calculator-screen-text");
 let memoryStack = [];
 // let calculatorOn = false;
-let previousAns = 0;
+let previousAns = null;
 
 const numberKeys = document.querySelectorAll(".number-key");
 const delKey = document.querySelector("#key-DEL");
@@ -105,6 +111,9 @@ acKey.addEventListener("click", () => clearStack());
 equalsKey.addEventListener("click", () => evaluateStack());
 
 function addToStack(number){
+    if (operatorSymbols.includes(number) && memoryStack.length == 0 && previousAns != null){
+        previousAns.toString().split("").forEach((element) => memoryStack.push(element));
+    }
     memoryStack.push(number);
     updateDisplay();
     console.log(memoryStack);
@@ -139,26 +148,28 @@ function evaluateStack(){
 
     //handle multiplication and division from left to right
     for (i = 0; i < unitsStack.length; i++){
+        if (unitsStack[i] == "."){
+            const val = unitsStack[i - 1] + (unitsStack[i + 1] / Math.pow(10, Math.floor(Math.log10(unitsStack[i+1]) + 1) ) );
+            unitsStack.splice(i-1, 3, val);
+        }
+    }
+    for (i = 0; i < unitsStack.length; i++){
         if (unitsStack[i] == "×"){
             const val = unitsStack[i - 1] * unitsStack[i + 1];
-            // unitsStack[i-1] = val;
             unitsStack.splice(i-1, 3, val);
         }
         else if (unitsStack[i] == "÷"){
             const val = unitsStack[i - 1] / unitsStack[i + 1];
-            // unitsStack[i-1] = val;
             unitsStack.splice(i-1, 3, val);
         }
     }
     for (i = 0; i < unitsStack.length; i++){
         if (unitsStack[i] == "+"){
             const val = unitsStack[i - 1] + unitsStack[i + 1];
-            // unitsStack[i-1] = val;
             unitsStack.splice(i-1, 3, val);
         }
         else if (unitsStack[i] == "-"){
             const val = unitsStack[i - 1] - unitsStack[i + 1];
-            // unitsStack[i-1] = val;
             unitsStack.splice(i-1, 3, val);
         }
     }
@@ -182,7 +193,7 @@ function organiseStack(unitsStack){
         else if (numbers.includes(memoryStack[i])){
             tempStack.push(memoryStack[i]);
         }
-        else if(operatorSymbols.includes(memoryStack[i])){
+        else if(operatorSymbols.includes(memoryStack[i]) || memoryStack[i] == previousAns){
             tempToUnitStack(tempStack, unitsStack);
             unitsStack.push(memoryStack[i]);
         }
