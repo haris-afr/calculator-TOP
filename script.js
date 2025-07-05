@@ -88,7 +88,6 @@ onBtn.addEventListener("click", () => {calculatorOn = !calculatorOn;});
 const screen = document.querySelector(".calculator-screen");
 const screenText = document.querySelector(".calculator-screen-text");
 let memoryStack = [];
-// let currentState = "";
 // let calculatorOn = false;
 let previousAns = 0;
 
@@ -103,7 +102,7 @@ const ansKey = document.querySelector("#key-ans");
 numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addToStack(e.target.textContent)));
 delKey.addEventListener("click", () => delStack());
 acKey.addEventListener("click", () => clearStack());
-equalsKey.addEventListener("click", () => organiseStack());
+equalsKey.addEventListener("click", () => evaluateStack());
 
 function addToStack(number){
     memoryStack.push(number);
@@ -133,10 +132,40 @@ function updateDisplay(){
 }
 
 function evaluateStack(){
+    let errorInStack = false; //TODO
     let unitsStack = [];
     organiseStack(unitsStack);
-
     console.log(unitsStack);
+
+    //handle multiplication and division from left to right
+    for (i = 0; i < unitsStack.length; i++){
+        if (unitsStack[i] == "×"){
+            const val = unitsStack[i - 1] * unitsStack[i + 1];
+            // unitsStack[i-1] = val;
+            unitsStack.splice(i-1, 3, val);
+        }
+        else if (unitsStack[i] == "÷"){
+            const val = unitsStack[i - 1] / unitsStack[i + 1];
+            // unitsStack[i-1] = val;
+            unitsStack.splice(i-1, 3, val);
+        }
+    }
+    for (i = 0; i < unitsStack.length; i++){
+        if (unitsStack[i] == "+"){
+            const val = unitsStack[i - 1] + unitsStack[i + 1];
+            // unitsStack[i-1] = val;
+            unitsStack.splice(i-1, 3, val);
+        }
+        else if (unitsStack[i] == "-"){
+            const val = unitsStack[i - 1] - unitsStack[i + 1];
+            // unitsStack[i-1] = val;
+            unitsStack.splice(i-1, 3, val);
+        }
+    }
+    console.log(unitsStack);
+    previousAns = unitsStack[0];
+
+
     clearStack();
     screenText.textContent = previousAns;
 }
@@ -144,7 +173,6 @@ function evaluateStack(){
 function organiseStack(unitsStack){
     // Join the seperate digits and operators together into units so we can evaluate them
     // E.G. [1,2,3,+,3,5,/,2,4] => [123, '+', 35, '/', 24]
-    
     let tempStack = [];
     for (i = 0; i < memoryStack.length; i++){
         if (numbers.includes(memoryStack[i]) && i == memoryStack.length - 1){
