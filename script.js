@@ -126,7 +126,7 @@ function updateDisplay(){
     let screenStr = memoryStack.join("");
     screenText.textContent = screenStr;
     if (screenText.offsetWidth > 420){
-        screenStr = "_" + memoryStack.slice(-12).join("");
+        screenStr = "_" + memoryStack.slice(-14).join("");
         screenText.textContent = screenStr;
     }
 }
