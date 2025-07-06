@@ -2,8 +2,8 @@ const middleRow = document.querySelector(".calculator-mid-row");
 const bottomRow = document.querySelector(".calculator-bottom-row");
 
 const numbers = ['0','1','2','3','4','5','6','7','8','9'];
-const operators = ['plus','minus','multiply','divide', 'decimal', 'bracket-start', 'bracket-end'];
-const operatorSymbols = ["+", "-", "×", "÷", '.', '(', ')'];
+const operators = ['plus','minus','multiply','divide', 'decimal', 'bracket-start', 'bracket-end', 'ans'];
+const operatorSymbols = ["+", "-", "×", "÷", '.', '(', ')', 'Ans'];
 
 function createMiddleRowButton(key, keyID){
     const btn = document.createElement("button");
@@ -57,11 +57,7 @@ for (i = 0; i < 18; i++){createMiddleRowButton(middleRowKeys[i], middleRowKeyIDs
 
 for(i = 0; i < 20; i++){createBottomRowButton(bottomRowKeys[i], bottomRowKeyIDs[i]);}
 
-function cprint(val) {console.log(val);}
-function add(a = 0, b = 0) {return a + b;}
-function subtract(a, b) {return a - b;}
-function multiply(a, b) {return a * b;}
-function divide(a, b) {return a / b;}
+
 function addArray(arr){
     return arr.reduce((sum, index) => sum + index);
 }
@@ -95,22 +91,52 @@ const screen = document.querySelector(".calculator-screen");
 const screenText = document.querySelector(".calculator-screen-text");
 let memoryStack = [];
 // let calculatorOn = false;
-let previousAns = null;
+let previousAns = 0;
 let clearedStack = false;
 
 const numberKeys = document.querySelectorAll(".number-key");
 const delKey = document.querySelector("#key-DEL");
 const acKey = document.querySelector("#key-AC");
 const equalsKey = document.querySelector("#key-equals");
-const ansKey = document.querySelector("#key-ans");
 
 numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addToStack(e.target.textContent)));
+// numberKeys.forEach((numKey) => document.addEventListener("keydown", (e) => {
+//     e.preventDefault();
+//     switch (e.key){
+//         case '/':
+//             addToStack("÷");
+//             break;
+//         case '*':
+//             addToStack("×");
+//             break;
+//         case 'Enter':
+//             evaluateStack();
+//             break;
+//         case '=':
+//             evaluateStack();
+//             break;
+//         case 'Delete':
+//             delStack();
+//             break;
+//         case 'Backspace':
+//             delStack();
+//             break;
+//         case 'Escape':
+//             clearStack();
+//             break;
+//         case numKey.textContent:
+//             addToStack(e.key);
+//         default:
+//             break;
+//     }
+// }))
+
 delKey.addEventListener("click", () => delStack());
 acKey.addEventListener("click", () => clearStack());
 equalsKey.addEventListener("click", () => evaluateStack());
 
 function addToStack(number){
-    if (operatorSymbols.includes(number) && memoryStack.length == 0 && previousAns != null && number != "." & number != '(' && clearedStack == false){
+    if (operatorSymbols.includes(number) && memoryStack.length == 0 && number != "." & number != '(' && clearedStack == false){
         previousAns.toString().split("").forEach((element) => memoryStack.push(element));
     }
     memoryStack.push(number);
@@ -143,6 +169,7 @@ function updateDisplay(){
 
 function evaluateStack(isRecursive = false, givenStack = []){
     let errorInStack = false;
+    let divisionByZero = false;
     let unitsStack = [];
     if (isRecursive){
         unitsStack = givenStack;
@@ -152,10 +179,13 @@ function evaluateStack(isRecursive = false, givenStack = []){
     }
     console.log(unitsStack);
 
-    //Maybe add support for unary + or -?
-
-    //handle operations in priority of decimals -> brackets -> unary plus/unary minus -> multiplication/division -> addition/subtraction from left to right
-    
+    //handle operations in priority of ans-key -> decimals -> brackets -> unary plus/unary minus -> multiplication/division -> addition/subtraction from left to right
+    //handle ans-key
+    for (i = 0; i < unitsStack.length; i++){
+        if (unitsStack[i] == "Ans"){
+            unitsStack.splice(i, 1, previousAns);
+        }
+    }
     //handle decimals
     for (i = 0; i < unitsStack.length; i++){
         if (unitsStack[i] == "."){
@@ -269,6 +299,7 @@ function evaluateStack(isRecursive = false, givenStack = []){
         }
         else if (unitsStack[i] == "÷"){
             if (operatorToTheLeftOrRight || undefinedToTheLeftOrRight) {errorInStack = true;}
+            if (unitsStack[i+1] == 0){divisionByZero = true;break;}
             const val = unitsStack[i - 1] / unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
             i--
@@ -306,6 +337,10 @@ function evaluateStack(isRecursive = false, givenStack = []){
     if (errorInStack){
         clearStack();
         screenText.textContent = "Invalid Operation!";
+    }
+    else if (divisionByZero){
+        clearStack();
+        screenText.textContent = "Nice try.";
     }
     else{
         previousAns = unitsStack[0];
