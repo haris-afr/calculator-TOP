@@ -38,20 +38,20 @@ function createBottomRowButton(key, keyID){
 
 const middleRowKeys =   ["", "", "", "", "", "",
                         "", "", "", "", "", "",
-                        "", "", "", "", "", "."]; //Not implemented
+                        "", "", "(", ")", "", ""];
 
 const middleRowKeyIDs =   ["x-square", "x-cube", "x-pow-y", "sin-inv", "cos-inv", "tan-inv",
                         "sqrt", "cbrt", "y-root", "sin", "cos", "tan",
-                        "log", "ln", "x-inv","ten-power", "factorial", "decimal",];
+                        "log", "ln", "bracket-start","bracket-end", "x-inv", "factorial",];
 
 const bottomRowKeys =   ["7", "8", "9", "DEL", "AC", 
                         "4", "5", "6", "×", "÷",
                         "1", "2", "3", "+", "-",
-                        "0", "(", ")", "Ans", "="];
+                        "0", ".", "", "Ans", "="];
 const bottomRowKeyIDs =   ["7", "8", "9", "DEL", "AC", 
                         "4", "5", "6", "multiply", "divide",
                         "1", "2", "3", "plus", "minus",
-                        "0", "bracket-start", "bracket-end", "ans", "equals"];
+                        "0", "decimal", "ten-power", "ans", "equals"];
 
 for (i = 0; i < 18; i++){createMiddleRowButton(middleRowKeys[i], middleRowKeyIDs[i]);}
 
