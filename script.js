@@ -2,7 +2,7 @@ const middleRow = document.querySelector(".calculator-mid-row");
 const bottomRow = document.querySelector(".calculator-bottom-row");
 
 const numbers = ['0','1','2','3','4','5','6','7','8','9'];
-const operators = ['plus','minus','multiply','divide', 'decimal'];
+const operators = ['plus','minus','multiply','divide', 'decimal', 'bracket-start', 'bracket-end'];
 const operatorSymbols = ["+", "-", "×", "÷", '.'];
 
 function createMiddleRowButton(key, keyID){
@@ -101,8 +101,6 @@ const numberKeys = document.querySelectorAll(".number-key");
 const delKey = document.querySelector("#key-DEL");
 const acKey = document.querySelector("#key-AC");
 const equalsKey = document.querySelector("#key-equals");
-// const tenPowerKey = document.querySelector("#key-ten-power");
-// const decimalKey = document.querySelector("#key-decimal");
 const ansKey = document.querySelector("#key-ans");
 
 numberKeys.forEach((numKey) => numKey.addEventListener("click", (e) => addToStack(e.target.textContent)));
@@ -141,10 +139,15 @@ function updateDisplay(){
 
 }
 
-function evaluateStack(){
+function evaluateStack(isRecursive = false, givenStack = []){
     let errorInStack = false;
     let unitsStack = [];
-    organiseStack(unitsStack);
+    if (isRecursive){
+        unitsStack = givenStack;
+    }
+    else{
+        organiseStack(unitsStack);
+    }
     console.log(unitsStack);
 
     //Maybe add support for unary + or -?
@@ -184,11 +187,13 @@ function evaluateStack(){
             if (operatorToTheLeftOrRight) {errorInStack = true;}
             const val = unitsStack[i - 1] * unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
+            i--;
         }
         else if (unitsStack[i] == "÷"){
             if (operatorToTheLeftOrRight) {errorInStack = true;}
             const val = unitsStack[i - 1] / unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
+            i--
         }
     }
     //handle addition and subtraction
@@ -198,14 +203,24 @@ function evaluateStack(){
             if (operatorToTheLeftOrRight) {errorInStack = true;}
             const val = unitsStack[i - 1] + unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
+            i--;
         }
         else if (unitsStack[i] == "-"){
             if (operatorToTheLeftOrRight) {errorInStack = true;}
             const val = unitsStack[i - 1] - unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
+            i--;
         }
     }
     
+    if (isRecursive){
+        if (errorInStack){
+            return undefined;
+        }
+        else{
+            return previousAns;
+        }
+    }
     
     console.log("Units Stack " + unitsStack);
     if (errorInStack){
