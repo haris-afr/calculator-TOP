@@ -3,7 +3,7 @@ const bottomRow = document.querySelector(".calculator-bottom-row");
 
 const numbers = ['0','1','2','3','4','5','6','7','8','9'];
 const operators = ['plus','minus','multiply','divide', 'decimal', 'bracket-start', 'bracket-end'];
-const operatorSymbols = ["+", "-", "×", "÷", '.'];
+const operatorSymbols = ["+", "-", "×", "÷", '.', '(', ')'];
 
 function createMiddleRowButton(key, keyID){
     const btn = document.createElement("button");
@@ -109,7 +109,7 @@ acKey.addEventListener("click", () => clearStack());
 equalsKey.addEventListener("click", () => evaluateStack());
 
 function addToStack(number){
-    if (operatorSymbols.includes(number) && memoryStack.length == 0 && previousAns != null && number != "."){
+    if (operatorSymbols.includes(number) && memoryStack.length == 0 && previousAns != null && number != "." & number != '('){
         previousAns.toString().split("").forEach((element) => memoryStack.push(element));
     }
     memoryStack.push(number);
@@ -161,7 +161,7 @@ function evaluateStack(isRecursive = false, givenStack = []){
             let endBracketPos = -1;
             //check if every start bracket has an end bracket
             for (j = i + 1; j < unitsStack.length; j++){
-                if (j == ")"){
+                if (unitsStack[j] == ")"){
                     endBracketPos = j;
                     break;
                 }
@@ -172,7 +172,7 @@ function evaluateStack(isRecursive = false, givenStack = []){
                 break;
             }
 
-            const val = evaluateStack(true, unitsStack.slice(startBracketPos + 1, endBracketPos - 1));
+            const val = evaluateStack(true, unitsStack.slice(startBracketPos + 1, endBracketPos));
             if (val == undefined){
                 errorInStack = true;
             }
@@ -248,7 +248,7 @@ function evaluateStack(isRecursive = false, givenStack = []){
             return undefined;
         }
         else{
-            return previousAns;
+            return unitsStack[0];
         }
     }
     
