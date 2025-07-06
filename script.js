@@ -159,11 +159,18 @@ function evaluateStack(isRecursive = false, givenStack = []){
             
             let startBracketPos = i;
             let endBracketPos = -1;
+            let newStartBrackets = 0;
             //check if every start bracket has an end bracket
             for (j = i + 1; j < unitsStack.length; j++){
-                if (unitsStack[j] == ")"){
+                if (unitsStack[j] == "("){
+                    newStartBrackets++;
+                }
+                else if (unitsStack[j] == ")" && newStartBrackets == 0){
                     endBracketPos = j;
                     break;
+                }
+                else if (unitsStack[j] == ")" && newStartBrackets > 0){
+                    newStartBrackets--;
                 }
             }
 
@@ -171,16 +178,33 @@ function evaluateStack(isRecursive = false, givenStack = []){
                 errorInStack = true;
                 break;
             }
+            
+            const iVal = i;
+            const startBracketVal = startBracketPos;
+            const endBracketVal = endBracketPos;
 
             const val = evaluateStack(true, unitsStack.slice(startBracketPos + 1, endBracketPos));
+
+            i = iVal;
+            startBracketPos = startBracketVal;
+            endBracketPos = endBracketVal;
+            
             if (val == undefined){
                 errorInStack = true;
             }
             unitsStack.splice(startBracketPos, 1 + (endBracketPos - startBracketPos), val);
-            i--;
+            
 
-            //const operatorToTheLeftOrRight = (operatorSymbols.includes(unitsStack[i-1]) || operatorSymbols.includes(unitsStack[i+1]));
-            //if
+            // const operatorToTheLeftOrRight = (operatorSymbols.includes(unitsStack[i-1]) || operatorSymbols.includes(unitsStack[i+1]));
+            if (!operatorSymbols.includes(unitsStack[i-1]) && unitsStack[i-1] != undefined){
+                unitsStack.splice(i, 0, '×');
+                i++;
+            }
+            if (!operatorSymbols.includes(unitsStack[i+1]) && unitsStack[i+1] != undefined){
+                unitsStack.splice(i+1, 0, '×');
+            }
+
+            i--;
         }
     }
     //handle decimals
