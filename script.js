@@ -152,7 +152,37 @@ function evaluateStack(isRecursive = false, givenStack = []){
 
     //Maybe add support for unary + or -?
 
-    //handle operations in priority of decimals -> multiplication/division -> addition/subtraction from left to right
+    //handle operations in priority of decimals -> brackets -> multiplication/division -> addition/subtraction from left to right
+    //handle bracket operations seperatly, return the answer then use that
+    for (i = 0; i < unitsStack.length; i++){
+        if (unitsStack[i] =="("){
+            
+            let startBracketPos = i;
+            let endBracketPos = -1;
+            //check if every start bracket has an end bracket
+            for (j = i + 1; j < unitsStack.length; j++){
+                if (j == ")"){
+                    endBracketPos = j;
+                    break;
+                }
+            }
+
+            if(endBracketPos == -1){
+                errorInStack = true;
+                break;
+            }
+
+            const val = evaluateStack(true, unitsStack.slice(startBracketPos + 1, endBracketPos - 1));
+            if (val == undefined){
+                errorInStack = true;
+            }
+            unitsStack.splice(startBracketPos, 1 + (endBracketPos - startBracketPos), val);
+            i--;
+
+            //const operatorToTheLeftOrRight = (operatorSymbols.includes(unitsStack[i-1]) || operatorSymbols.includes(unitsStack[i+1]));
+            //if
+        }
+    }
     //handle decimals
     for (i = 0; i < unitsStack.length; i++){
         if (unitsStack[i] == "."){
