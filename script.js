@@ -152,8 +152,37 @@ function evaluateStack(isRecursive = false, givenStack = []){
 
     //Maybe add support for unary + or -?
 
-    //handle operations in priority of decimals -> brackets -> multiplication/division -> addition/subtraction from left to right
-    //handle bracket operations seperatly, return the answer then use that
+    //handle operations in priority of decimals -> brackets -> unary plus/unary minus -> multiplication/division -> addition/subtraction from left to right
+    
+    //handle decimals
+    for (i = 0; i < unitsStack.length; i++){
+        if (unitsStack[i] == "."){
+            if (operatorSymbols.includes(unitsStack[i-1]) || unitsStack[i-1] == undefined){
+                unitsStack.splice(i, 0, 0);
+                i++;
+            }
+            if (operatorSymbols.includes(unitsStack[i+1]) || unitsStack[i+1] == undefined){
+                unitsStack.splice(i+1, 0, 0);
+            }
+            if (!(Number.isInteger(unitsStack[i-1]) && Number.isInteger(unitsStack[i+1]))){
+                errorInStack = true;
+            }
+            const wholeNum = unitsStack[i - 1];
+            let decimalVal = (unitsStack[i + 1] / Math.pow(10, Math.floor(Math.log10(unitsStack[i+1]) + 1) ));
+
+            //log doesnt work if decimal val is 0, so we hard code it to be equal to 0 in that case
+            if (unitsStack[i+1] == 0){
+                decimalVal = 0;
+            }
+            
+            const val =  wholeNum + decimalVal;
+            
+            unitsStack.splice(i-1, 3, val);
+            i--;
+        }
+    }
+
+    //handle inner bracket operations as seperate stacks using recursion, return the answer then use that
     for (i = 0; i < unitsStack.length; i++){
         if (unitsStack[i] =="("){
             
@@ -206,33 +235,7 @@ function evaluateStack(isRecursive = false, givenStack = []){
             i--;
         }
     }
-    //handle decimals
-    for (i = 0; i < unitsStack.length; i++){
-        if (unitsStack[i] == "."){
-            if (operatorSymbols.includes(unitsStack[i-1]) || unitsStack[i-1] == undefined){
-                unitsStack.splice(i, 0, 0);
-                i++;
-            }
-            if (operatorSymbols.includes(unitsStack[i+1]) || unitsStack[i+1] == undefined){
-                unitsStack.splice(i+1, 0, 0);
-            }
-            if (!(Number.isInteger(unitsStack[i-1]) && Number.isInteger(unitsStack[i+1]))){
-                errorInStack = true;
-            }
-            const wholeNum = unitsStack[i - 1];
-            let decimalVal = (unitsStack[i + 1] / Math.pow(10, Math.floor(Math.log10(unitsStack[i+1]) + 1) ));
 
-            //log doesnt work if decimal val is 0, so we hard code it to be equal to 0 in that case
-            if (unitsStack[i+1] == 0){
-                decimalVal = 0;
-            }
-            
-            const val =  wholeNum + decimalVal;
-            
-            unitsStack.splice(i-1, 3, val);
-            i--;
-        }
-    }
     //handle multiplication and division
     for (i = 0; i < unitsStack.length; i++){
         const operatorToTheLeftOrRight = (operatorSymbols.includes(unitsStack[i-1]) || operatorSymbols.includes(unitsStack[i+1]))
