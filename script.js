@@ -183,7 +183,9 @@ function evaluateStack(isRecursive = false, givenStack = []){
     //handle ans-key
     for (i = 0; i < unitsStack.length; i++){
         if (unitsStack[i] == "Ans"){
-            unitsStack.splice(i, 1, previousAns);
+            unitsStack.splice(i, 1, ')');
+            unitsStack.splice(i, 0, previousAns);
+            unitsStack.splice(i, 0, '(');
         }
     }
     //handle decimals
