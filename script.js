@@ -142,12 +142,15 @@ function updateDisplay(){
 }
 
 function evaluateStack(){
-    let errorInStack = false; //TODO
+    let errorInStack = false;
     let unitsStack = [];
     organiseStack(unitsStack);
     console.log(unitsStack);
 
-    //handle multiplication and division from left to right
+    //Maybe add support for unary + or -?
+
+    //handle operations in priority of decimals -> multiplication/division -> addition/subtraction from left to right
+    //handle decimals
     for (i = 0; i < unitsStack.length; i++){
         if (unitsStack[i] == "."){
             if (operatorSymbols.includes(unitsStack[i-1]) || unitsStack[i-1] == undefined){
@@ -157,33 +160,47 @@ function evaluateStack(){
             if (operatorSymbols.includes(unitsStack[i+1]) || unitsStack[i+1] == undefined){
                 unitsStack.splice(i+1, 0, 0);
             }
+            if (!(Number.isInteger(unitsStack[i-1]) && Number.isInteger(unitsStack[i+1]))){
+                errorInStack = true;
+            }
             const wholeNum = unitsStack[i - 1];
             let decimalVal = (unitsStack[i + 1] / Math.pow(10, Math.floor(Math.log10(unitsStack[i+1]) + 1) ));
+
+            //log doesnt work if decimal val is 0, so we hard code it to be equal to 0 in that case
             if (unitsStack[i+1] == 0){
                 decimalVal = 0;
             }
             
             const val =  wholeNum + decimalVal;
-            //TODO: multiple decimals in one number
+            
             unitsStack.splice(i-1, 3, val);
+            i--;
         }
     }
+    //handle multiplication and division
     for (i = 0; i < unitsStack.length; i++){
+        const operatorToTheLeftOrRight = (operatorSymbols.includes(unitsStack[i-1]) || operatorSymbols.includes(unitsStack[i+1]));
         if (unitsStack[i] == "×"){
+            if (operatorToTheLeftOrRight) {errorInStack = true;}
             const val = unitsStack[i - 1] * unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
         }
         else if (unitsStack[i] == "÷"){
+            if (operatorToTheLeftOrRight) {errorInStack = true;}
             const val = unitsStack[i - 1] / unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
         }
     }
+    //handle addition and subtraction
     for (i = 0; i < unitsStack.length; i++){
+        const operatorToTheLeftOrRight = (operatorSymbols.includes(unitsStack[i-1]) || operatorSymbols.includes(unitsStack[i+1]));
         if (unitsStack[i] == "+"){
+            if (operatorToTheLeftOrRight) {errorInStack = true;}
             const val = unitsStack[i - 1] + unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
         }
         else if (unitsStack[i] == "-"){
+            if (operatorToTheLeftOrRight) {errorInStack = true;}
             const val = unitsStack[i - 1] - unitsStack[i + 1];
             unitsStack.splice(i-1, 3, val);
         }
