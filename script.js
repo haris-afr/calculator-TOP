@@ -96,6 +96,7 @@ const screenText = document.querySelector(".calculator-screen-text");
 let memoryStack = [];
 // let calculatorOn = false;
 let previousAns = null;
+let clearedStack = false;
 
 const numberKeys = document.querySelectorAll(".number-key");
 const delKey = document.querySelector("#key-DEL");
@@ -109,7 +110,7 @@ acKey.addEventListener("click", () => clearStack());
 equalsKey.addEventListener("click", () => evaluateStack());
 
 function addToStack(number){
-    if (operatorSymbols.includes(number) && memoryStack.length == 0 && previousAns != null && number != "." & number != '('){
+    if (operatorSymbols.includes(number) && memoryStack.length == 0 && previousAns != null && number != "." & number != '(' && clearedStack == false){
         previousAns.toString().split("").forEach((element) => memoryStack.push(element));
     }
     memoryStack.push(number);
@@ -121,8 +122,9 @@ function delStack(){
     updateDisplay();
 }
 function clearStack(){
-   memoryStack = [];
-   updateDisplay();
+    memoryStack = [];
+    updateDisplay();
+    clearedStack = true;
 }
 function updateDisplay(){
     if (memoryStack.length == 0){
@@ -236,6 +238,25 @@ function evaluateStack(isRecursive = false, givenStack = []){
         }
     }
 
+    //handle unary-plus/unary-minus
+    for (i = 0; i < unitsStack.length; i++){
+        const operatorToTheLeft = (operatorSymbols.includes(unitsStack[i-1]));
+        const undefinedToTheLeft = (unitsStack[i-1] == undefined);
+        const numberToTheRight = (typeof unitsStack[i+1] == "number");
+        if (unitsStack[i] == "+"){
+            if (!((operatorToTheLeft || undefinedToTheLeft) && numberToTheRight)) {break;}
+            const val = unitsStack[i + 1];
+            unitsStack.splice(i, 2, val);
+            i--;
+        }
+        else if (unitsStack[i] == "-"){
+            if (!((operatorToTheLeft || undefinedToTheLeft) && numberToTheRight)) {break;}
+            const val = -unitsStack[i + 1];
+            unitsStack.splice(i, 2, val);
+            i--;
+        }
+    }
+
     //handle multiplication and division
     for (i = 0; i < unitsStack.length; i++){
         const operatorToTheLeftOrRight = (operatorSymbols.includes(unitsStack[i-1]) || operatorSymbols.includes(unitsStack[i+1]))
@@ -253,6 +274,7 @@ function evaluateStack(isRecursive = false, givenStack = []){
             i--
         }
     }
+
     //handle addition and subtraction
     for (i = 0; i < unitsStack.length; i++){
         const operatorToTheLeftOrRight = (operatorSymbols.includes(unitsStack[i-1]) || operatorSymbols.includes(unitsStack[i+1]));
@@ -288,6 +310,7 @@ function evaluateStack(isRecursive = false, givenStack = []){
     else{
         previousAns = unitsStack[0];
         clearStack();
+        clearedStack = false;
         screenText.textContent = previousAns;
     }
 }
